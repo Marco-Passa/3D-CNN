@@ -1,0 +1,22 @@
+type: "Adam"
+net: "./trainTR13.prototxt"                  # this is the network choosen
+base_lr: 0.0000001                           # begin training at a learning rate of 0.01 = 1e-2
+lr_policy: "fixed"                           # learning rate policy
+#stepsize: 3000                              # drop the learning rate every 3000 iterations
+#gamma: 0.1                                  # drop the learning rate by a factor of 10 (i.e., multiply it by a factor of gamma = 0.1)
+#power: 0.9
+#iter_size: 1 
+display: 1
+#average_loss:10
+max_iter: 100000                             # train for n iterations total
+#momentum: 0.9                               # By smoothing the weight updates across iterations, momentum tends to make deep learning with SGD both stabler and faster
+#weight_decay: 0.0005
+snapshot: 2000                             # The snapshot interval in iterations
+snapshot_prefix: "./snapshot/HVSMR_TR13_021"   # snapshot folder. this name changes at every training. you decide. first number is the trainXXX and the second one is the training ex 201,202,203, etc. this will be used in test_example in matlab
+solver_mode: GPU                            # sover mode (CPU/GPU)
+random_seed: 831486
+#debug_info: true
+momentum: 0.9
+momentum2: 0.999
+delta: 1e-08
+#regularization_type: "L2"
