@@ -1,0 +1,369 @@
+name: "deep-net"
+
+#########################################
+##layer 0 (Data)
+
+layer {
+  name: "Data"
+  type: "HDF5Data"
+  top: "DATA"
+  top: "LABEL"
+  hdf5_data_param{
+    source: "../trainMask.list"
+    batch_size: 1
+  }
+}
+
+#########################################
+##layer 1a (Convolution)
+
+layer {
+  name: "conv1a"
+  type: "Convolution"
+  bottom: "DATA"
+  top: "conv1"
+  convolution_param {
+    num_output: 2
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      std: 0
+    }
+  }
+}
+
+#########################################
+##layer 1a (BatchNormalization)
+
+layer {
+   name:"batch1a"
+   type:"BatchNorm"
+   bottom: "conv1"
+   top: "conv1"
+}   
+
+#########################################
+##layer 1a (ReLU)
+
+layer {
+  name: "relu1a"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "conv1"
+}
+
+#########################################
+##layer 1b (Convolution)
+
+layer {
+  name: "conv1b"
+  type: "Convolution"
+  bottom: "conv1"
+  top: "conv1"
+  convolution_param {
+    num_output: 2
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      std: 0
+    }
+  }
+}
+
+#########################################
+##layer 1b (BatchNormalization)
+
+layer {
+   name:"batch1b"
+   type:"BatchNorm"
+   bottom: "conv1"
+   top: "conv1"
+}   
+
+#########################################
+##layer 1b (ReLU)
+
+layer {
+  name: "relu1b"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "conv1"
+}
+
+#########################################
+##layer 1 (Pooling)
+
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1"
+  top: "pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2 
+    stride: 2      
+  }
+}
+
+#########################################
+##layer 2a (Convolution)
+
+layer {
+  name: "conv2a"
+  type: "Convolution"
+  bottom: "pool"
+  top: "conv2"
+  convolution_param {
+    num_output: 8
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      std: 0
+    }
+  }
+}
+
+#########################################
+##layer 2a (BatchNormalization)
+
+layer {
+   name:"batch2a"
+   type:"BatchNorm"
+   bottom: "conv2"
+   top: "conv2"
+}   
+
+#########################################
+##layer 2a (ReLU)
+
+layer {
+  name: "relu2a"
+  type: "ReLU"
+  bottom: "conv2"
+  top: "conv2"
+}
+
+#########################################
+##layer 2b (Convolution)
+
+layer {
+  name: "conv2b"
+  type: "Convolution"
+  bottom: "conv2"
+  top: "conv2"
+  convolution_param {
+    num_output: 8
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      std: 0
+    }
+  }
+}
+
+#########################################
+##layer 2b (BatchNormalization)
+
+layer {
+   name:"batch2b"
+   type:"BatchNorm"
+   bottom: "conv2"
+   top: "conv2"
+}   
+
+#########################################
+##layer 2b (ReLU)
+
+layer {
+  name: "relu2b"
+  type: "ReLU"
+  bottom: "conv2"
+  top: "conv2"
+}
+
+#########################################
+
+#########################################
+##layer 5 (Deconv)
+
+layer {
+  name: "deconv5"
+  type: "Deconvolution"
+  bottom: "conv2"
+  top: "deconv"
+  convolution_param {
+    num_output: 2
+    pad: 0
+    kernel_size: 2
+    stride: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      std: 0
+    }
+  }
+}
+
+########################################
+##layer 5 (Convolution)
+
+layer {
+  name: "concat"
+  bottom: "deconv"
+  bottom: "conv1"
+  top: "deconv5"
+  type: "Concat"
+  concat_param {
+    axis: 1
+  }
+}
+
+########################################
+##layer 5a (Convolution)
+
+layer {
+  name: "conv5a"
+  type: "Convolution"
+  bottom: "deconv5"
+  top: "deconv5"
+  convolution_param {
+    num_output: 4
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      std: 0
+    }
+  }
+}
+
+#########################################
+##layer 5a (BatchNormalization)
+
+layer {
+   name:"batch5a"
+   type:"BatchNorm"
+   bottom: "deconv5"
+   top: "deconv5"
+}   
+
+#########################################
+##layer 5a (ReLU)
+
+layer {
+  name: "relu5a"
+  type: "ReLU"
+  bottom: "deconv5"
+  top: "deconv5"
+}
+
+#########################################
+##layer 5b (Convolution)
+
+layer {
+  name: "conv5b"
+  type: "Convolution"
+  bottom: "deconv5"
+  top: "deconv5"
+  convolution_param {
+    num_output: 4
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      std: 0
+    }
+  }
+}
+
+#########################################
+##layer 5b (BatchNormalization)
+
+layer {
+   name:"batch5b"
+   type:"BatchNorm"
+   bottom: "deconv5"
+   top: "deconv5"
+}   
+
+#########################################
+##layer 5b (ReLU)
+
+layer {
+  name: "relu5b"
+  type: "ReLU"
+  bottom: "deconv5"
+  top: "deconv5"
+}
+
+########################################
+##layer 6 (Convolution)
+
+layer {
+  name: "convfin"
+  type: "Convolution"
+  bottom: "deconv5"
+  top: "score"
+  convolution_param {
+    num_output: 1
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      std: 0
+    }
+  }
+}
+
+#########################################
+##layer 7 (Loss)
+
+layer {
+  name: "loss_main"
+  type: "SigmoidCrossEntropyLoss"
+  bottom: "score"
+  bottom: "LABEL"
+  top: "loss_main"
+}
