@@ -1,4 +1,9 @@
 3D-CNN
+Denosing, segmentation and classification of brain MRI with deep learnig technique
+The roject contains:
+-Pre procesess: data augmentation and cropping
+-Train: CNN for denosing, segmentation, classification and transfer learning for classification using denoising data
+-Test: API to test the models
 
 Installation
 
