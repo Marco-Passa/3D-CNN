@@ -1,0 +1,80 @@
+name: "deep-net"
+state {
+  phase: TRAIN
+}
+layer {
+  name: "Data"
+  type: "HDF5Data"
+  top: "DATA"
+  top: "LABEL"
+  hdf5_data_param {
+    source: "Denosing.list"
+    batch_size: 1
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "DATA"
+  top: "conv1"
+  convolution_param {
+    num_output: 2
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      std: 0
+    }
+  }
+}
+layer {
+  name: "ReLU1"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "relu1"
+}
+layer {
+  name: "deconv1"
+  type: "Deconvolution"
+  bottom: "relu1"
+  top: "deconv1"
+  convolution_param {
+    num_output: 1
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      std: 0
+    }
+  }
+}
+layer {
+  name: "ReLU"
+  type: "ReLU"
+  bottom: "deconv1"
+  top: "score"
+}
+layer {
+  name: "loss_main"
+  type: "EuclideanLoss"
+  bottom: "score"
+  bottom: "LABEL"
+  top: "loss_main"
+}
+layer {
+  name: "acc_test"
+  type: "Accuracy"
+  bottom: "score"
+  bottom: "LABEL"
+  top: "Accuracy"
+}
