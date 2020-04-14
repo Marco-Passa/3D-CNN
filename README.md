@@ -1,5 +1,5 @@
 **3D-CNN**\
-Denosing, segmentation and classification of brain MRI with deep learnig technique\
+Denosing, segmentation and classification of brain MRI with deep learnig technique.
 
 **The roject contains:**\
 -Pre-process: data augmentation and cropping;\
